@@ -221,6 +221,12 @@
             <artifactId>commons-pool</artifactId>
             <version>1.6</version>
         </dependency>
+        <!--自动创建数据表插件-->
+        <dependency>
+            <groupId>com.gitee.sunchenbin.mybatis.actable</groupId>
+            <artifactId>mybatis-enhance-actable</artifactId>
+            <version>1.0.1</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>cfmy</finalName>
