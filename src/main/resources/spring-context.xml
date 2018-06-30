@@ -32,7 +32,7 @@
         <property name="dataSource" ref="dbcp" />
 
         <!-- 自动扫描mapping.xml文件 -->
-        <property name="mapperLocations" value="classpath*:mapper/*.xml"></property>
+        <property name="mapperLocations" value="classpath*:com/zw/cf/mapper/*.xml"></property>
         <property name="typeAliasesPackage" value="com.isea533.mybatis.model"/>
         <property name="plugins">
             <array>
