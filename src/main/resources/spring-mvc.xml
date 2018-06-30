@@ -30,7 +30,7 @@
     <!-- 将 springSwaggerConfig加载到spring容器 -->
     <bean class="com.mangofactory.swagger.configuration.SpringSwaggerConfig" />
     <!-- 将自定义的swagger配置类加载到spring容器 -->
-    <bean id="documentationConfig" class="com.zw.cf.swagger.SwaggerConfig" />
+    <bean id="documentationConfig" class="com.zw.base.swagger.SwaggerConfig" />
 
 
     <!-- 定义跳转的文件的前后缀 ，视图模式配置-->

@@ -23,7 +23,7 @@
                         password="zw200813" />
 
         <!-- 指定javaBean生成的位置 -->
-        <javaModelGenerator targetPackage="com.zw.cf.model" targetProject="src/main/java" >
+        <javaModelGenerator targetPackage="com.zw.base.model" targetProject="src/main/java" >
             <!-- 在targetPackage的基础上，根据数据库的schema再生成一层package，最终生成的类放在这个package下，默认为false -->
             <property name="enableSubPackages" value="true" />
             <!-- 设置是否在getter方法中，对String类型字段调用trim()方法 -->
@@ -31,18 +31,17 @@
         </javaModelGenerator>
 
         <!--指定sql映射文件生成的位置 -->
-        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources" >
+        <sqlMapGenerator targetPackage="com.zw.base.mapper" targetProject="src/main/java" >
             <property name="enableSubPackages" value="true" />
         </sqlMapGenerator>
         <!-- 指定dao接口生成的位置，mapper接口 -->
-        <javaClientGenerator type="XMLMAPPER" targetPackage="com.zw.cf.dao" targetProject="src/main/java" >
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.zw.base.dao" targetProject="src/main/java" >
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
 
         <!-- table表生成对应的DoaminObject -->
         <table tableName="code" domainObjectName="Code"></table>
         <table tableName="users" domainObjectName="User"></table>
-        <table tableName="token" domainObjectName="Token"></table>
         <table tableName="errCode" domainObjectName="ErrCode"></table>
     </context>
 

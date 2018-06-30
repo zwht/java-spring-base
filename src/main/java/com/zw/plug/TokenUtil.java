@@ -1,5 +1,5 @@
 package com.zw.plug;
-import com.zw.cf.model.User;
+import com.zw.base.model.User;
 import redis.clients.jedis.Jedis;
 
 import java.util.Date;
