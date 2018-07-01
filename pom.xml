@@ -13,7 +13,6 @@
         <spring.version>4.3.9.RELEASE</spring.version>
     </properties>
 
-
     <dependencies>
         <!-- spring需要的jar包 -->
         <dependency>
@@ -229,6 +228,14 @@
         </dependency>
     </dependencies>
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
         <finalName>cfmy</finalName>
         <defaultGoal>compile</defaultGoal>
         <plugins>
