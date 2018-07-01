@@ -1,4 +1,4 @@
-package com.zw.plug;
+package com.zw.common;
 
 /**
  * Created by zhaowei on 2017/8/17.

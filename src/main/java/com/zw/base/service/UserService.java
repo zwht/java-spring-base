@@ -1,16 +1,17 @@
 package com.zw.base.service;
 
 import com.zw.base.model.User;
-import com.zw.base.vo.ResetPasswordVo;
-import com.zw.base.vo.UserListFind;
-import com.zw.plug.Response;
+import com.zw.common.vo.user.LoginVo;
+import com.zw.common.vo.user.ResetPasswordVo;
+import com.zw.common.vo.user.UserListFind;
+import com.zw.common.Response;
 
 /**
  * Created by zhaowei on 2017/8/17.
  */
 public interface UserService {
     Response getUserById(String id);
-    Response login(String name,String password);
+    Response login(LoginVo loginVo);
     Response refreshToken(String token,String token1);
     Response getUserList(Integer pageNum, Integer pageSize, UserListFind userListFind);
     Response addUser(User user);

@@ -1,7 +1,7 @@
 package com.zw.base.service.impl;
 import com.zw.base.model.User;
 import com.zw.base.service.UtilsService;
-import com.zw.plug.JwtUtils;
+import com.zw.common.util.JwtUtils;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;

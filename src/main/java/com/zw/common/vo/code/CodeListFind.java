@@ -1,4 +1,4 @@
-package com.zw.base.vo;
+package com.zw.common.vo.code;
 
 /**
  * Created by zhaowei on 2017/10/22.

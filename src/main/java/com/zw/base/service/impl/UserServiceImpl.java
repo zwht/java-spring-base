@@ -6,15 +6,14 @@ import com.zw.base.dao.UserMapper;
 import com.zw.base.model.User;
 import com.zw.base.model.UserExample;
 import com.zw.base.service.UserService;
-import com.zw.base.vo.ResetPasswordVo;
-import com.zw.base.vo.UserListFind;
-import com.zw.plug.JwtUtils;
-import com.zw.plug.PageObj;
-import com.zw.plug.Response;
-import com.zw.plug.ZwUtil;
+import com.zw.common.vo.user.*;
+import com.zw.common.util.JwtUtils;
+import com.zw.common.PageObj;
+import com.zw.common.Response;
+import com.zw.common.util.ZwUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.zw.plug.TokenUtil;
+import com.zw.common.util.TokenUtil;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -38,8 +37,10 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public Response login(String loginName, String password) {
-        Response<User> response = new Response();
+    public Response login(LoginVo loginVo) {
+        Response<LoginSuccessVo> response = new Response();
+        String loginName = loginVo.getLoginName();
+        String password =loginVo.getPassword();
         try {
             if (loginName == null || loginName == "") {
                 throw new Exception("登录名不能为空!");
@@ -58,18 +59,30 @@ public class UserServiceImpl implements UserService {
             if(users.size() == 0){
                 return response.failure(400, "登录名或者密码错误！");
             }else if (users.get(0).getPassword().equals(zwUtil.EncoderByMd5(password))) {
-                User userOne=users.get(0);
+                User user=users.get(0);
+
                 long currentTime = System.currentTimeMillis();
                 currentTime +=2*60*60*1000;
                 Date date = new Date(currentTime);
-                    userOne.setTokenTime(date);
-                userOne.setPassword("");
 
-                String token = JwtUtils.sign(userOne, 30L * 24L * 3600L * 1000L);
-                userOne.setToken(token);
-                TokenUtil.setToken(userOne.getId(),token);
+                TokenVo tokenVo=new TokenVo();
+                tokenVo.setLoginName(user.getLoginName());
+                tokenVo.setId(user.getId());
+                tokenVo.setEndTime(date);
+                String token = JwtUtils.sign(tokenVo, 30L * 24L * 3600L * 1000L);
 
-                return response.success(userOne);
+                LoginSuccessVo loginSuccessVo=new LoginSuccessVo();
+                loginSuccessVo.setId(user.getId());
+                loginSuccessVo.setLogin_name(user.getLoginName());
+                loginSuccessVo.setName(user.getName());
+                loginSuccessVo.setPhone(user.getPhone());
+                loginSuccessVo.setRoles(user.getRoles());
+                loginSuccessVo.setType(user.getType());
+                loginSuccessVo.setToken(token);
+
+                TokenUtil.setToken(user.getId(),token);
+
+                return response.success(loginSuccessVo);
             } else {
                 return response.failure(400, "密码错误！");
             }
@@ -82,12 +95,12 @@ public class UserServiceImpl implements UserService {
     }
 
     public Response refreshToken(String token,String token1) {
-        Response<User> response = new Response();
+        Response<TokenVo> response = new Response();
         if(!token.equals(token1)) return response.failure(400,"请求错误，token不同！");
         try {
-            User user = JwtUtils.unsign(token, User.class);
+            TokenVo tokenVo = JwtUtils.unsign(token, TokenVo.class);
             Date newDate = new Date();
-            Date date = user.getTokenTime();
+            Date date = tokenVo.getEndTime();
             if (newDate.getTime() < date.getTime()) {
                 return response.failure(400, "token过期");
             }
@@ -95,11 +108,10 @@ public class UserServiceImpl implements UserService {
             long currentTime = System.currentTimeMillis();
             currentTime += 2 * 60 * 60 * 1000;
             Date date1 = new Date(currentTime);
-            user.setTokenTime(date1);
+            tokenVo.setEndTime(date1);
 
-            String newToken = JwtUtils.sign(user, 30L * 24L * 3600L * 1000L);
-            user.setToken(newToken);
-            return response.success(user);
+            String newToken = JwtUtils.sign(tokenVo, 30L * 24L * 3600L * 1000L);
+            return response.success(tokenVo);
         }catch (Exception e){
             return response.failure(400, e.getMessage());
         }
@@ -111,7 +123,7 @@ public class UserServiceImpl implements UserService {
         //条件查询3句话
         UserExample example = new UserExample();
         UserExample.Criteria criteria = example.createCriteria();
-        criteria.andCorporationIdEqualTo(userListFind.getCorporationId());
+        criteria.andParentIdEqualTo(userListFind.getCorporationId());
         if(userListFind.getRoles()!=null&&!"".equals(userListFind.getRoles())) criteria.andRolesEqualTo(userListFind.getRoles());
 
         try {

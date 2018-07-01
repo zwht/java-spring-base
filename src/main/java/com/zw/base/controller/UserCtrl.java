@@ -4,12 +4,13 @@ import com.wordnik.swagger.annotations.*;
 import com.zw.base.model.User;
 import com.zw.base.service.UserService;
 import com.zw.base.service.UtilsService;
-import com.zw.base.vo.LoginVo;
-import com.zw.base.vo.ResetPasswordVo;
-import com.zw.base.vo.UserListFind;
-import com.zw.plug.JwtUtils;
-import com.zw.plug.PageObj;
-import com.zw.plug.Response;
+import com.zw.common.vo.user.LoginSuccessVo;
+import com.zw.common.vo.user.LoginVo;
+import com.zw.common.vo.user.ResetPasswordVo;
+import com.zw.common.vo.user.UserListFind;
+import com.zw.common.util.JwtUtils;
+import com.zw.common.PageObj;
+import com.zw.common.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -36,12 +37,7 @@ public class UserCtrl {
     @ResponseBody
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ApiOperation(value = "添加用户", httpMethod = "POST", notes = "添加用户")
-    @ApiResponses(value = {@ApiResponse(code = 200, message = "商品信息"),
-            @ApiResponse(code = 201, message = "(token验证失败)", response = String.class),
-            @ApiResponse(code = 202, message = "(系统错误)", response = String.class)})
-
-    public Response add(
-            @ApiParam(required = true, value = "corporationListFind", name = "corporationListFind") @RequestBody User user,
+    public Response add(@RequestBody User user,
             HttpServletRequest request
     ) {
         String token = request.getHeader("Authorization");
@@ -49,8 +45,8 @@ public class UserCtrl {
             token = request.getParameter("Authorization");
         }
         User admin = JwtUtils.unsign(token, User.class);
-        String corporationid = admin.getCorporationId();
-        user.setCorporationId(corporationid);
+        String corporationid = admin.getParentId();
+        user.setParentId(corporationid);
         return userService.addUser(user);
     }
 
@@ -64,7 +60,7 @@ public class UserCtrl {
             HttpServletRequest request
     ) {
         User user = utilsService.getUser(request);
-        String corporationid = user.getCorporationId();
+        String corporationid = user.getParentId();
         userListFind.setCorporationId(corporationid);
         return userService.getUserList(pageNum, pageSize, userListFind);
     }
@@ -72,10 +68,10 @@ public class UserCtrl {
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ApiOperation(value = "登录接口", httpMethod = "POST", notes = "登录")
-    public Response<User> login(
+    public Response<LoginSuccessVo> login(
             @ApiParam(required = true, value = "用户名密码", name = "LoginVo") @RequestBody LoginVo loginVo
     ) {
-        return userService.login(loginVo.getLoginName(), loginVo.getPassword());
+        return userService.login(loginVo);
     }
 
     @ResponseBody

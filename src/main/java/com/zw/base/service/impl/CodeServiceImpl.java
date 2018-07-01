@@ -6,9 +6,9 @@ import com.zw.base.dao.CodeMapper;
 import com.zw.base.model.Code;
 import com.zw.base.model.CodeExample;
 import com.zw.base.service.CodeService;
-import com.zw.base.vo.CodeListFind;
-import com.zw.plug.PageObj;
-import com.zw.plug.Response;
+import com.zw.common.vo.code.CodeListFind;
+import com.zw.common.PageObj;
+import com.zw.common.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

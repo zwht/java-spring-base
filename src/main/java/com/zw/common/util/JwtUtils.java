@@ -1,4 +1,4 @@
-package com.zw.plug;
+package com.zw.common.util;
 
 import java.util.Map;
 import java.util.HashMap;

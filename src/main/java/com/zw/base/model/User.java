@@ -1,7 +1,5 @@
 package com.zw.base.model;
 
-import java.util.Date;
-
 public class User {
     private String id;
 
@@ -9,7 +7,7 @@ public class User {
 
     private String password;
 
-    private String corporationId;
+    private String parentId;
 
     private Integer state;
 
@@ -20,10 +18,6 @@ public class User {
     private String type;
 
     private String roles;
-
-    private String token;
-
-    private Date tokenTime;
 
     private String address;
 
@@ -51,12 +45,12 @@ public class User {
         this.password = password == null ? null : password.trim();
     }
 
-    public String getCorporationId() {
-        return corporationId;
+    public String getParentId() {
+        return parentId;
     }
 
-    public void setCorporationId(String corporationId) {
-        this.corporationId = corporationId == null ? null : corporationId.trim();
+    public void setParentId(String parentId) {
+        this.parentId = parentId == null ? null : parentId.trim();
     }
 
     public Integer getState() {
@@ -97,22 +91,6 @@ public class User {
 
     public void setRoles(String roles) {
         this.roles = roles == null ? null : roles.trim();
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token == null ? null : token.trim();
-    }
-
-    public Date getTokenTime() {
-        return tokenTime;
-    }
-
-    public void setTokenTime(Date tokenTime) {
-        this.tokenTime = tokenTime;
     }
 
     public String getAddress() {

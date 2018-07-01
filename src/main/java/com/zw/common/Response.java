@@ -1,4 +1,4 @@
-package com.zw.plug;
+package com.zw.common;
 
 import javax.validation.ConstraintViolation;
 import java.util.*;

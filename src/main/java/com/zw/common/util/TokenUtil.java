@@ -1,5 +1,6 @@
-package com.zw.plug;
+package com.zw.common.util;
 import com.zw.base.model.User;
+import com.zw.common.vo.user.TokenVo;
 import redis.clients.jedis.Jedis;
 
 import java.util.Date;
@@ -11,7 +12,7 @@ import java.util.List;
 public class TokenUtil {
 
     public static void setToken(String id,String token){
-        Jedis jedis =RedisUtil.getJedis();
+        Jedis jedis = RedisUtil.getJedis();
         try {
             jedis.lpush(id, token);
         }catch (Exception e){
@@ -27,9 +28,9 @@ public class TokenUtil {
         try{
             List<String> list=jedis.lrange(user.getId(),0,10);
             for(int i=0; i<list.size(); i++) {
-                User user1 = JwtUtils.unsign(list.get(i), User.class);
+                TokenVo tokenVo = JwtUtils.unsign(list.get(i), TokenVo.class);
                 Date newDate=new Date();
-                Date date=user1.getTokenTime();
+                Date date=tokenVo.getEndTime();
                 if(newDate.getTime()<date.getTime()){
                     if(token.equals(list.get(i))){
                         key=true;
