@@ -4,19 +4,19 @@ import com.zw.base.model.User;
 import com.zw.common.vo.user.LoginVo;
 import com.zw.common.vo.user.ResetPasswordVo;
 import com.zw.common.vo.user.UserListFind;
-import com.zw.common.Response;
+import com.zw.common.vo.ResponseVo;
 
 /**
  * Created by zhaowei on 2017/8/17.
  */
 public interface UserService {
-    Response getUserById(String id);
-    Response login(LoginVo loginVo);
-    Response refreshToken(String token,String token1);
-    Response getUserList(Integer pageNum, Integer pageSize, UserListFind userListFind);
-    Response addUser(User user);
-    Response update(User user);
-    Response del(String id);
-    Response resetPassword(ResetPasswordVo resetPasswordVo);
+    ResponseVo getUserById(String id);
+    ResponseVo login(LoginVo loginVo);
+    ResponseVo refreshToken(String token, String token1);
+    ResponseVo getUserList(Integer pageNum, Integer pageSize, UserListFind userListFind);
+    ResponseVo addUser(User user);
+    ResponseVo update(User user);
+    ResponseVo del(String id);
+    ResponseVo resetPassword(ResetPasswordVo resetPasswordVo);
 
 }

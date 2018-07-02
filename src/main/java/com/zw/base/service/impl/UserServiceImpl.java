@@ -8,8 +8,8 @@ import com.zw.base.model.UserExample;
 import com.zw.base.service.UserService;
 import com.zw.common.vo.user.*;
 import com.zw.common.util.JwtUtils;
-import com.zw.common.PageObj;
-import com.zw.common.Response;
+import com.zw.common.vo.PageVo;
+import com.zw.common.vo.ResponseVo;
 import com.zw.common.util.ZwUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,8 +28,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserMapper userMapper;
 
-    public Response getUserById(String id) {
-        Response response = new Response();
+    public ResponseVo getUserById(String id) {
+        ResponseVo response = new ResponseVo();
         try {
             return response.success(userMapper.selectByPrimaryKey(id));
         } catch (Exception e) {
@@ -37,8 +37,8 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public Response login(LoginVo loginVo) {
-        Response<LoginSuccessVo> response = new Response();
+    public ResponseVo login(LoginVo loginVo) {
+        ResponseVo<LoginSuccessVo> response = new ResponseVo();
         String loginName = loginVo.getLoginName();
         String password =loginVo.getPassword();
         try {
@@ -61,24 +61,25 @@ public class UserServiceImpl implements UserService {
             }else if (users.get(0).getPassword().equals(zwUtil.EncoderByMd5(password))) {
                 User user=users.get(0);
 
-                long currentTime = System.currentTimeMillis();
+                long currentTime = new Date().getTime();
                 currentTime +=2*60*60*1000;
-                Date date = new Date(currentTime);
+                Long tokenEndTime = new Date(currentTime).getTime();
 
                 TokenVo tokenVo=new TokenVo();
                 tokenVo.setLoginName(user.getLoginName());
                 tokenVo.setId(user.getId());
-                tokenVo.setEndTime(date);
+                tokenVo.setEndTime(tokenEndTime);
                 String token = JwtUtils.sign(tokenVo, 30L * 24L * 3600L * 1000L);
 
                 LoginSuccessVo loginSuccessVo=new LoginSuccessVo();
                 loginSuccessVo.setId(user.getId());
-                loginSuccessVo.setLogin_name(user.getLoginName());
+                loginSuccessVo.setLoginName(user.getLoginName());
                 loginSuccessVo.setName(user.getName());
                 loginSuccessVo.setPhone(user.getPhone());
                 loginSuccessVo.setRoles(user.getRoles());
                 loginSuccessVo.setType(user.getType());
                 loginSuccessVo.setToken(token);
+                loginSuccessVo.setTokenEndTime(tokenEndTime);
 
                 TokenUtil.setToken(user.getId(),token);
 
@@ -94,20 +95,20 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    public Response refreshToken(String token,String token1) {
-        Response<TokenVo> response = new Response();
+    public ResponseVo refreshToken(String token, String token1) {
+        ResponseVo<TokenVo> response = new ResponseVo();
         if(!token.equals(token1)) return response.failure(400,"请求错误，token不同！");
         try {
             TokenVo tokenVo = JwtUtils.unsign(token, TokenVo.class);
             Date newDate = new Date();
-            Date date = tokenVo.getEndTime();
-            if (newDate.getTime() < date.getTime()) {
+            Long date = tokenVo.getEndTime();
+            if (newDate.getTime() < date) {
                 return response.failure(400, "token过期");
             }
             //使用用户名查询是否有相同用户名
             long currentTime = System.currentTimeMillis();
             currentTime += 2 * 60 * 60 * 1000;
-            Date date1 = new Date(currentTime);
+            Long date1 = new Date(currentTime).getTime();
             tokenVo.setEndTime(date1);
 
             String newToken = JwtUtils.sign(tokenVo, 30L * 24L * 3600L * 1000L);
@@ -117,9 +118,9 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public Response getUserList(Integer pageNum, Integer pageSize, UserListFind userListFind) {
-        Response response = new Response();
-        PageObj pageObj = new PageObj();
+    public ResponseVo getUserList(Integer pageNum, Integer pageSize, UserListFind userListFind) {
+        ResponseVo response = new ResponseVo();
+        PageVo pageObj = new PageVo();
         //条件查询3句话
         UserExample example = new UserExample();
         UserExample.Criteria criteria = example.createCriteria();
@@ -136,8 +137,8 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    public Response addUser(User user) {
-        Response response = new Response();
+    public ResponseVo addUser(User user) {
+        ResponseVo response = new ResponseVo();
         try {
             Date date = new Date();
             UserExample userExample=new UserExample();
@@ -167,8 +168,8 @@ public class UserServiceImpl implements UserService {
             return response.failure(400, e.toString());
         }
     }
-    public Response update(User user) {
-        Response response = new Response();
+    public ResponseVo update(User user) {
+        ResponseVo response = new ResponseVo();
         try {
             UserExample userExample = new UserExample();
             UserExample.Criteria criteria = userExample.createCriteria();
@@ -199,8 +200,8 @@ public class UserServiceImpl implements UserService {
             return response.failure(400, e.toString());
         }
     }
-    public Response resetPassword(ResetPasswordVo resetPasswordVo){
-        Response response = new Response();
+    public ResponseVo resetPassword(ResetPasswordVo resetPasswordVo){
+        ResponseVo response = new ResponseVo();
         try {
             UserExample userExample = new UserExample();
             UserExample.Criteria criteria = userExample.createCriteria();
@@ -229,8 +230,8 @@ public class UserServiceImpl implements UserService {
             return response.failure(400, e.toString());
         }
     }
-    public Response del(String id) {
-        Response response = new Response();
+    public ResponseVo del(String id) {
+        ResponseVo response = new ResponseVo();
         try {
             return response.success(userMapper.deleteByPrimaryKey(id));
         } catch (Exception e) {

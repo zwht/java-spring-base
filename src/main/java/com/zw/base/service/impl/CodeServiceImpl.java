@@ -7,8 +7,8 @@ import com.zw.base.model.Code;
 import com.zw.base.model.CodeExample;
 import com.zw.base.service.CodeService;
 import com.zw.common.vo.code.CodeListFind;
-import com.zw.common.PageObj;
-import com.zw.common.Response;
+import com.zw.common.vo.PageVo;
+import com.zw.common.vo.ResponseVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,8 +28,8 @@ public class CodeServiceImpl implements CodeService {
     @Autowired
     CodeMapper codeMapper;
 
-    public Response add(Code code) {
-        Response response = new Response();
+    public ResponseVo add(Code code) {
+        ResponseVo response = new ResponseVo();
         try {
             Date date = new Date();
             CodeExample codeExample=new CodeExample();
@@ -58,9 +58,9 @@ public class CodeServiceImpl implements CodeService {
         }
     }
 
-    public Response list(Integer pageNum, Integer pageSize, CodeListFind codeListFind) {
-        Response response = new Response();
-        PageObj pageObj = new PageObj();
+    public ResponseVo list(Integer pageNum, Integer pageSize, CodeListFind codeListFind) {
+        ResponseVo response = new ResponseVo();
+        PageVo pageObj = new PageVo();
         //条件查询3句话
         CodeExample codeExample = new CodeExample();
         CodeExample.Criteria criteria = codeExample.createCriteria();
@@ -80,8 +80,8 @@ public class CodeServiceImpl implements CodeService {
         }
     }
 
-    public Response getById(String id) {
-        Response response = new Response();
+    public ResponseVo getById(String id) {
+        ResponseVo response = new ResponseVo();
         try {
             return response.success(codeMapper.selectByPrimaryKey(id));
         } catch (Exception e) {
@@ -89,8 +89,8 @@ public class CodeServiceImpl implements CodeService {
         }
     }
 
-    public Response update(Code code) {
-        Response response = new Response();
+    public ResponseVo update(Code code) {
+        ResponseVo response = new ResponseVo();
         try {
             CodeExample codeExample = new CodeExample();
             CodeExample.Criteria criteria = codeExample.createCriteria();
@@ -122,8 +122,8 @@ public class CodeServiceImpl implements CodeService {
         }
     }
 
-    public Response del(String id) {
-        Response response = new Response();
+    public ResponseVo del(String id) {
+        ResponseVo response = new ResponseVo();
         try {
             return response.success(codeMapper.deleteByPrimaryKey(id));
         } catch (Exception e) {

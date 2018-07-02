@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zw.common.util.TokenUtil;
+import com.zw.common.vo.ResponseVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,10 +19,6 @@ import java.io.PrintWriter;
  * Created by zhaowei on 2017/6/29.
  */
 
-/**
- * @author tfj
- * 2014-8-1
- */
 public class CommonInterceptor extends HandlerInterceptorAdapter{
     private final Logger log = LoggerFactory.getLogger(CommonInterceptor.class);
     /**
@@ -48,7 +45,7 @@ public class CommonInterceptor extends HandlerInterceptorAdapter{
         String requestUri = request.getRequestURI();
         String[] noToken=new String[]{
                 "/cfmy/user/login",
-                "/cfmy/code/list",
+
                 "/cfmy/file/upToken"
         };
         int key=0;
@@ -59,9 +56,12 @@ public class CommonInterceptor extends HandlerInterceptorAdapter{
         }
         if(key==1) return true;
 
+        // 直接关闭拦截器，不做token验证
+        //return true;
+
         String token = request.getHeader("Authorization");
         if(token==null){
-            token = request.getParameter("Authorization");
+            token = request.getParameter("token");
         }
 
         if(token!=null){
@@ -70,7 +70,7 @@ public class CommonInterceptor extends HandlerInterceptorAdapter{
             }
         }
 
-        Response response1=new Response();
+        ResponseVo response1=new ResponseVo();
         response1.failure(412, "没有权限，请登录");
         ObjectMapper objectMapper = new ObjectMapper();
         String userJsonStr = objectMapper.writeValueAsString(response1);

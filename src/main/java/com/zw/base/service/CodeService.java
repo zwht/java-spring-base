@@ -2,15 +2,15 @@ package com.zw.base.service;
 
 import com.zw.base.model.Code;
 import com.zw.common.vo.code.CodeListFind;
-import com.zw.common.Response;
+import com.zw.common.vo.ResponseVo;
 
 /**
  * Created by zhaowei on 2017/8/17.
  */
 public interface CodeService {
-    Response add(Code code);
-    Response list(Integer pageNum, Integer pageSize, CodeListFind codeListFind);
-    Response getById(String id);
-    Response update(Code code);
-    Response del(String id);
+    ResponseVo add(Code code);
+    ResponseVo list(Integer pageNum, Integer pageSize, CodeListFind codeListFind);
+    ResponseVo getById(String id);
+    ResponseVo update(Code code);
+    ResponseVo del(String id);
 }

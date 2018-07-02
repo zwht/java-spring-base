@@ -9,8 +9,8 @@ import com.zw.common.vo.user.LoginVo;
 import com.zw.common.vo.user.ResetPasswordVo;
 import com.zw.common.vo.user.UserListFind;
 import com.zw.common.util.JwtUtils;
-import com.zw.common.PageObj;
-import com.zw.common.Response;
+import com.zw.common.vo.PageVo;
+import com.zw.common.vo.ResponseVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -37,8 +37,8 @@ public class UserCtrl {
     @ResponseBody
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ApiOperation(value = "添加用户", httpMethod = "POST", notes = "添加用户")
-    public Response add(@RequestBody User user,
-            HttpServletRequest request
+    public ResponseVo add(@RequestBody User user,
+                          HttpServletRequest request
     ) {
         String token = request.getHeader("Authorization");
         if (token == null) {
@@ -53,7 +53,7 @@ public class UserCtrl {
     @ResponseBody
     @RequestMapping(value = "/list/{pageNum}/{pageSize}", method = RequestMethod.POST)
     @ApiOperation(value = "获取所有用户列表", httpMethod = "POST", notes = "获取用户")
-    public Response<PageObj<List<User>>> getUserList(
+    public ResponseVo<PageVo<List<User>>> getUserList(
             @ApiParam(required = true, value = "当前页面", name = "pageNum") @PathVariable Integer pageNum,
             @ApiParam(required = true, value = "每页显示条数", name = "pageSize") @PathVariable Integer pageSize,
             @ApiParam(required = true, value = "userListFind", name = "userListFind") @RequestBody UserListFind userListFind,
@@ -68,7 +68,7 @@ public class UserCtrl {
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ApiOperation(value = "登录接口", httpMethod = "POST", notes = "登录")
-    public Response<LoginSuccessVo> login(
+    public ResponseVo<LoginSuccessVo> login(
             @ApiParam(required = true, value = "用户名密码", name = "LoginVo") @RequestBody LoginVo loginVo
     ) {
         return userService.login(loginVo);
@@ -77,8 +77,8 @@ public class UserCtrl {
     @ResponseBody
     @RequestMapping(value = "/refreshToken", method = RequestMethod.POST)
     @ApiOperation(value = "更新token", httpMethod = "POST", notes = "更新token")
-    public Response<User> login(HttpServletRequest request,
-                                @ApiParam(required = true, value = "旧token", name = "token") @RequestParam String token) {
+    public ResponseVo<User> login(HttpServletRequest request,
+                                  @ApiParam(required = true, value = "旧token", name = "token") @RequestParam String token) {
 
         String token1 = request.getHeader("access_token");
         if (token1 == null) {
@@ -91,7 +91,7 @@ public class UserCtrl {
     @ResponseBody
     @RequestMapping(value = "/getById", method = RequestMethod.GET)
     @ApiOperation(value = "根据用户userId获取用户信息", httpMethod = "GET", notes = "获取用户")
-    public Response<User> selectByPrimaryKey(
+    public ResponseVo<User> selectByPrimaryKey(
             @ApiParam(required = true, value = "用户Id", name = "id") @RequestParam String id
     ) {
         return userService.getUserById(id);
@@ -99,7 +99,7 @@ public class UserCtrl {
     @ResponseBody
     @RequestMapping(value = "/detail", method = RequestMethod.GET)
     @ApiOperation(value = "根据用户userId获取用户信息", httpMethod = "GET", notes = "获取用户")
-    public Response<User> detail(HttpServletRequest request) {
+    public ResponseVo<User> detail(HttpServletRequest request) {
         User user = utilsService.getUser(request);
         return userService.getUserById(user.getId());
     }
@@ -108,7 +108,7 @@ public class UserCtrl {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ApiOperation(value = "更新", httpMethod = "POST", notes = "更新")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "更新")})
-    public Response update(
+    public ResponseVo update(
             @ApiParam(required = true, value = "color", name = "color") @RequestBody User user
     ) {
         return userService.update(user);
@@ -118,7 +118,7 @@ public class UserCtrl {
     @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
     @ApiOperation(value = "更新", httpMethod = "POST", notes = "更新")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "更新")})
-    public Response resetPassword(
+    public ResponseVo resetPassword(
             @ApiParam(required = true, value = "color", name = "color") @RequestBody ResetPasswordVo resetPasswordVo
     ) {
         return userService.resetPassword(resetPasswordVo);
@@ -128,7 +128,7 @@ public class UserCtrl {
     @ResponseBody
     @RequestMapping(value = "/del", method = RequestMethod.GET)
     @ApiOperation(value = "根据id删除", httpMethod = "GET", notes = "删除")
-    public Response<User> del(
+    public ResponseVo<User> del(
             @ApiParam(required = true, value = "id", name = "id") @RequestParam String id
     ) {
         return userService.del(id);

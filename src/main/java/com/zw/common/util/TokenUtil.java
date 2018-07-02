@@ -22,21 +22,21 @@ public class TokenUtil {
         }
     }
     public static boolean getToken(String token){
-        User user = JwtUtils.unsign(token, User.class);
+        TokenVo tokenVo = JwtUtils.unsign(token, TokenVo.class);
         Boolean key=false;
         Jedis jedis =RedisUtil.getJedis();
         try{
-            List<String> list=jedis.lrange(user.getId(),0,10);
+            List<String> list=jedis.lrange(tokenVo.getId(),0,10);
             for(int i=0; i<list.size(); i++) {
-                TokenVo tokenVo = JwtUtils.unsign(list.get(i), TokenVo.class);
-                Date newDate=new Date();
-                Date date=tokenVo.getEndTime();
-                if(newDate.getTime()<date.getTime()){
+                TokenVo tokenVoItem = JwtUtils.unsign(list.get(i), TokenVo.class);
+                Long newDate=new Date().getTime();
+                Long date=tokenVoItem.getEndTime();
+                if(newDate<date){
                     if(token.equals(list.get(i))){
                         key=true;
                     }
                 }else{
-                    jedis.rpush(user.getId(),list.get(i));
+                    jedis.rpush(tokenVo.getId(),list.get(i));
                 }
             }
             return key;

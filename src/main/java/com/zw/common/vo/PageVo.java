@@ -1,45 +1,32 @@
 package com.zw.common.vo;
 
-
-import java.util.ArrayList;
-import java.util.List;
-
-
 /**
- * Created by zhaowei on 2018/7/1.
+ * Created by zhaowei on 2017/8/17.
  */
 public class PageVo<T> {
+    private Integer pageNum;
+    private Integer pageSize;
+    private Long pageCount;
+    private T data;
 
-
-    private Integer totalCount = 0;
-
-    private List<T> pageData = new ArrayList<T>();
-
-    public PageVo() {
+    public PageVo init(Integer pageNum, Integer pageSize, Long pageCount, T data){
+        this.pageNum=pageNum;
+        this.pageSize=pageSize;
+        this.pageCount=pageCount;
+        this.data=data;
+        return this;
     }
 
-    public PageVo(Integer totalCount) {
-        this.totalCount = totalCount;
+    public Integer getPageNum(){
+        return this.pageNum;
     }
-
-    public PageVo(Integer totalCount, List<T> pageData) {
-        this.totalCount = totalCount;
-        this.pageData = pageData;
+    public Integer getPageSize(){
+        return this.pageSize;
     }
-
-    public Integer getTotalCount() {
-        return totalCount;
+    public Long getPageCount(){
+        return this.pageCount;
     }
-
-    public void setTotalCount(Integer totalCount) {
-        this.totalCount = totalCount;
-    }
-
-    public List<T> getPageData() {
-        return pageData;
-    }
-
-    public void setPageData(List<T> pageData) {
-        this.pageData = pageData;
+    public T getData(){
+        return this.data;
     }
 }

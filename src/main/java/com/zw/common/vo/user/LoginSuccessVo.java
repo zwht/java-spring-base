@@ -7,8 +7,9 @@ public class LoginSuccessVo {
     private String token;
     private String type;
     private String roles;
-    private String login_name;
+    private String loginName;
     private String phone;
+    private Long tokenEndTime;
 
     public String getId() {
         return id;
@@ -50,12 +51,12 @@ public class LoginSuccessVo {
         this.roles = roles;
     }
 
-    public String getLogin_name() {
-        return login_name;
+    public String getLoginName() {
+        return loginName;
     }
 
-    public void setLogin_name(String login_name) {
-        this.login_name = login_name;
+    public void setLoginName(String loginName) {
+        this.loginName = loginName;
     }
 
     public String getPhone() {
@@ -64,5 +65,13 @@ public class LoginSuccessVo {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public Long getTokenEndTime() {
+        return tokenEndTime;
+    }
+
+    public void setTokenEndTime(Long tokenEndTime) {
+        this.tokenEndTime = tokenEndTime;
     }
 }

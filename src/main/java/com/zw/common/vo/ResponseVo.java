@@ -1,4 +1,4 @@
-package com.zw.common;
+package com.zw.common.vo;
 
 import javax.validation.ConstraintViolation;
 import java.util.*;
@@ -6,7 +6,7 @@ import java.util.*;
 /**
  * Created by zhaowei on 2017/6/29.
  */
-public class Response<D> {
+public class ResponseVo<D> {
     private static final String OK = "ok";
     private static final String ERROR = "error";
 
@@ -15,36 +15,33 @@ public class Response<D> {
     private String message;
     private List messageObj;
 
-    public Response success() {
-        meta(true, OK);
+    public ResponseVo success() {
+        meta(200, OK);
         return this;
     }
 
-    public Response success(D data) {
-        meta(true, OK);
+    public ResponseVo success(D data) {
+        meta(200, OK);
         this.data = data;
         return this;
     }
 
-    public Response failure(Integer code) {
-        meta(false, ERROR);
-        this.code=code;
+    public ResponseVo failure(Integer code) {
+        meta(code, ERROR);
         return this;
     }
 
-    public Response failure(Integer code,String message) {
-        meta(false, message);
-        this.code=code;
+    public ResponseVo failure(Integer code, String message) {
+        meta(code, message);
         return this;
     }
-    public Response failure(Integer code,List messageObj) {
-        meta(false,"验证错误");
+    public ResponseVo failure(Integer code, List messageObj) {
+        meta(code,"验证错误");
         this.messageObj=messageObj;
-        this.code=code;
         return this;
     }
 
-    public Response validation(Set<ConstraintViolation> constraintViolations){
+    public ResponseVo validation(Set<ConstraintViolation> constraintViolations){
         List<Map> list = new ArrayList<Map>();
         for (ConstraintViolation constraintViolation : constraintViolations) {
             Map<String,String> violatorList=new HashMap<String, String>();
@@ -53,6 +50,11 @@ public class Response<D> {
             list.add(violatorList);
         }
         return this.failure(401,list);
+    }
+
+    public void meta(Integer code, String message) {
+        this.message = message;
+        this.code=code;
     }
 
     public D getData() {
@@ -67,11 +69,5 @@ public class Response<D> {
     public List getMessageObj() {
         return this.messageObj;
     }
-
-    public void meta(boolean success, String message) {
-        this.message = message;
-        this.code=200;
-    }
-
 
 }

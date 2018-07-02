@@ -6,8 +6,8 @@ import com.zw.base.model.User;
 import com.zw.base.service.CodeService;
 import com.zw.base.service.UtilsService;
 import com.zw.common.vo.code.CodeListFind;
-import com.zw.common.PageObj;
-import com.zw.common.Response;
+import com.zw.common.vo.PageVo;
+import com.zw.common.vo.ResponseVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -34,7 +34,7 @@ public class CodeCtrl {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     @ApiOperation(value = "添加", httpMethod = "POST", notes = "添加")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "添加")})
-    public Response add(
+    public ResponseVo add(
             @ApiParam(required = true, value = "code", name = "code") @RequestBody Code code,
             HttpServletRequest request
     ) {
@@ -46,11 +46,11 @@ public class CodeCtrl {
     @ResponseBody
     @RequestMapping(value = "/list/{pageNum}/{pageSize}", method = RequestMethod.POST)
     @ApiOperation(value = "获取所有用户列表", httpMethod = "POST", notes = "获取用户")
-    public Response<PageObj<List<User>>> List(
+    public ResponseVo<PageVo<List<User>>> List(
             @ApiParam(required = true, value = "当前页面", name = "pageNum") @PathVariable Integer pageNum,
             @ApiParam(required = true, value = "每页显示条数", name = "pageSize") @PathVariable Integer pageSize,
-            @ApiParam(required = true, value = "codeListFind", name = "codeListFind") @RequestBody CodeListFind codeListFind,
-            HttpServletRequest request) {
+            @ApiParam(required = true, value = "codeListFind", name = "codeListFind") @RequestBody CodeListFind codeListFind
+    ) {
 
         return codeService.list(pageNum, pageSize, codeListFind);
     }
@@ -58,7 +58,7 @@ public class CodeCtrl {
     @ResponseBody
     @RequestMapping(value = "/getById", method = RequestMethod.GET)
     @ApiOperation(value = "根据id获取", httpMethod = "GET", notes = "获取")
-    public Response<User> getById(
+    public ResponseVo<User> getById(
             @ApiParam(required = true, value = "Id", name = "Id") @RequestParam String id
     ) {
         return codeService.getById(id);
@@ -69,7 +69,7 @@ public class CodeCtrl {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ApiOperation(value = "更新", httpMethod = "POST", notes = "更新")
     @ApiResponses(value = {@ApiResponse(code = 200, message = "更新")})
-    public Response update(
+    public ResponseVo update(
             @ApiParam(required = true, value = "code", name = "code") @RequestBody Code code
     ) {
         return codeService.update(code);
@@ -78,7 +78,7 @@ public class CodeCtrl {
     @ResponseBody
     @RequestMapping(value = "/del", method = RequestMethod.GET)
     @ApiOperation(value = "根据id删除", httpMethod = "GET", notes = "删除")
-    public Response<User> del(
+    public ResponseVo<User> del(
             @ApiParam(required = true, value = "id", name = "id") @RequestParam String id
     ) {
         return codeService.del(id);

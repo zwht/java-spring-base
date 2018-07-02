@@ -10,7 +10,7 @@ public class TokenVo {
 
     private String loginName;
     private String id;
-    private Date endTime;
+    private Long endTime;
 
     public String getLoginName() {
         return loginName;
@@ -28,11 +28,11 @@ public class TokenVo {
         this.id = id;
     }
 
-    public Date getEndTime() {
+    public Long getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Date endTime) {
+    public void setEndTime(Long endTime) {
         this.endTime = endTime;
     }
 }
